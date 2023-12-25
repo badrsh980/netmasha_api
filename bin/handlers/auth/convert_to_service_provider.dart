@@ -4,42 +4,28 @@ import 'package:supabase/supabase.dart';
 import '../../configuration/supabase.dart';
 import '../../helper/checkBody.dart';
 
-createAccountHandler(Request req) async {
+convertToServiceProviderHandler(Request req) async {
   try {
     final Map body = json.decode(await req.readAsString());
 
-    List<String> keyNames = [
-      "email",
-      "password",
-      "phone",
-      "name",
-    ];
+    List<String> keyNames = ["commercial_record", "city"];
 
     checkBody(body: body, keysCheck: keyNames);
 
     final supabase = SupabaseIntegration.instant;
     AuthResponse? user;
 
-    await supabase!.auth.admin
-        .createUser(AdminUserAttributes(
-            email: body["email"],
-            password: body["password"],
-            emailConfirm: true))
-        .then((value) async {
-      try {
-        user = await supabase.auth.signInWithPassword(
-            password: body["password"], email: body["email"]);
-        final uuid = <String, String>{"uuid_auth": user!.user!.id};
-        body.remove("email");
-        body.remove("phone");
-        body.remove("password");
-        body.addEntries(uuid.entries);
-        await supabase.from('explorers').insert(body);
-      } catch (error) {
-        print(error);
-        throw FormatException("here is error");
-      }
-    });
+    await supabase!.auth.admin;
+
+    try {
+      final uuid = <String, String>{"uuid_auth": user!.user!.id};
+      body.addEntries(uuid.entries);
+
+      await supabase.from('explorers').insert(body);
+    } catch (error) {
+      print(error);
+      throw FormatException("here is error");
+    }
 
     return Response.ok(
         json.encode({

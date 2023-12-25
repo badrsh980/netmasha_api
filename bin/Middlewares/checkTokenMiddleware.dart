@@ -11,7 +11,7 @@ Middleware checkTokenMiddleware() => (innerHandler) => (Request req) async {
         final jwt = JWT.verify(
             token!,
             SecretKey(
-                'RQ4cbokpJ3tAlFdUMb5w8Hs3JTOrGgza2FgXEHatmEJo+/wuAt7Qq65EuIW97LVkSuttnupy86aGXlPLOR3Qrg=='));
+                'oJVdT9Zs695KAP/OnTpzYcR6B6wI9F//n7I7G91endgR+obryG5b8gtSkPhpWDuBdNtbII3h8q1wtWf6o4eyKg=='));
 
         final jwtData = JWT.decode(token);
         print(jwtData.subject);
