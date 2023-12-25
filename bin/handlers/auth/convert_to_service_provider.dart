@@ -7,32 +7,36 @@ import '../../helper/checkBody.dart';
 convertToServiceProviderHandler(Request req) async {
   try {
     final Map body = json.decode(await req.readAsString());
+    final token = req.headers['authorization']!.split(" ").last;
 
     List<String> keyNames = ["commercial_record", "city"];
 
     checkBody(body: body, keysCheck: keyNames);
-
     final supabase = SupabaseIntegration.instant;
-    AuthResponse? user;
 
     await supabase!.auth.admin;
+    final UserResponse user = await supabase.auth.getUser(token);
+
+    final name = await supabase
+        .from('explorers')
+        .select('name')
+        .eq('uuid_auth', user.user!.id);
 
     try {
-      final uuid = <String, String>{"uuid_auth": user!.user!.id};
+      final uuid = <String, String>{
+        "uuid_auth": user.user!.id,
+        "name": name.first['name']
+      };
       body.addEntries(uuid.entries);
 
-      await supabase.from('explorers').insert(body);
+      await supabase.from('serviceproviders').insert(body);
+      await supabase.from('explorers').delete().eq("uuid_auth", user.user!.id);
     } catch (error) {
       print(error);
       throw FormatException("here is error");
     }
 
-    return Response.ok(
-        json.encode({
-          "token": user!.session?.accessToken,
-          "refreshToken": user!.session?.refreshToken,
-          "expires_at": user!.session?.expiresAt
-        }),
+    return Response.ok(json.encode({"msg": "done"}),
         headers: {"Content-Type": "application/json"});
   } on FormatException catch (error) {
     return Response.badRequest(body: error.message);

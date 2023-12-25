@@ -1,6 +1,7 @@
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
+import '../handlers/auth/convert_to_service_provider.dart';
 import '../handlers/auth/createAccountHandler.dart';
 import '../handlers/auth/loginHandlers.dart';
 
@@ -13,7 +14,8 @@ class AuthRoutes {
         return Response.ok("AuthRoutes");
       })
       ..post("/login", loginHandler)
-      ..post("/create_account", createAccountHandler);
+      ..post("/create_account", createAccountHandler)
+      ..post("/convert_To_Service_Provider", convertToServiceProviderHandler);
 
     return appRoutes;
   }
