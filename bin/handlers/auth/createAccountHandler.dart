@@ -35,7 +35,7 @@ createAccountHandler(Request req) async {
       }
     });
 
-    return Response.ok(json.encode({}),
+    return Response.ok(json.encode({'msg': 'otp has been sent to your email'}),
         headers: {"Content-Type": "application/json"});
   } on FormatException catch (error) {
     return Response.badRequest(body: error.message);

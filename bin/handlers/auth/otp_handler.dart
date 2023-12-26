@@ -14,8 +14,8 @@ otpHandler(Request req) async {
     final supabase = SupabaseIntegration.instant;
     AuthResponse? user;
 
-    user = await supabase?.auth
-        .signInWithPassword(password: body["password"], email: body["email"]);
+    user = await supabase?.auth.verifyOTP(
+        token: body['otp'], type: OtpType.email, email: body['email']);
 
     return Response.ok(
         json.encode({
