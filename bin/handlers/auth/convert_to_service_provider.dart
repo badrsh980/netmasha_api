@@ -21,7 +21,6 @@ convertToServiceProviderHandler(Request req) async {
         .from('explorers')
         .select('name')
         .eq('uuid_auth', user.user!.id);
-
     try {
       final uuid = <String, String>{
         "uuid_auth": user.user!.id,

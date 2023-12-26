@@ -17,6 +17,7 @@ dependencies:
   supabase: ^2.0.2
   dart_jsonwebtoken: ^2.12.1
   shelf_hotreload: ^1.4.0
+  localstorage: ^4.0.0+1
 
 dev_dependencies:
   http: ^1.1.0

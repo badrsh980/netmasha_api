@@ -8,31 +8,25 @@ createAccountHandler(Request req) async {
   try {
     final Map body = json.decode(await req.readAsString());
 
-    List<String> keyNames = [
-      "email",
-      "password",
-      "phone",
-      "name",
-    ];
+    List<String> keyNames = ["email", "password", "phone", "name"];
 
     checkBody(body: body, keysCheck: keyNames);
+    AuthResponse? user;
 
     final supabase = SupabaseIntegration.instant;
-    AuthResponse? user;
 
     await supabase!.auth.admin
         .createUser(AdminUserAttributes(
-            email: body["email"],
-            password: body["password"],
-            emailConfirm: true))
+      email: body["email"],
+      password: body["password"],
+    ))
         .then((value) async {
       try {
-        user = await supabase.auth.signInWithPassword(
-            password: body["password"], email: body["email"]);
-        final uuid = <String, String>{"uuid_auth": user!.user!.id};
+        await supabase.auth.resend(type: OtpType.signup, email: body["email"]);
         body.remove("email");
         body.remove("phone");
         body.remove("password");
+        final uuid = <String, String>{"uuid_auth": user!.user!.id};
         body.addEntries(uuid.entries);
         await supabase.from('explorers').insert(body);
       } catch (error) {
@@ -41,12 +35,7 @@ createAccountHandler(Request req) async {
       }
     });
 
-    return Response.ok(
-        json.encode({
-          "token": user!.session?.accessToken,
-          "refreshToken": user!.session?.refreshToken,
-          "expires_at": user!.session?.expiresAt
-        }),
+    return Response.ok(json.encode({}),
         headers: {"Content-Type": "application/json"});
   } on FormatException catch (error) {
     return Response.badRequest(body: error.message);
