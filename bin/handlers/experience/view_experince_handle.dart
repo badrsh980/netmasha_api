@@ -3,25 +3,23 @@ import 'package:shelf/shelf.dart';
 import 'package:supabase/supabase.dart';
 import '../../configuration/supabase.dart';
 
-viewFavoriteHandler(Request req) async {
+viewExperinceHandler(Request req) async {
   try {
     final token = req.headers['authorization']!.split(" ").last;
     final supabase = SupabaseIntegration.instant;
 
     await supabase!.auth.admin;
-    final UserResponse user = await supabase.auth.getUser(token);
+    await supabase.auth.getUser(token);
 
-    final PostgrestList favorites;
+    final PostgrestList experinces;
     try {
-      final uuid = <String, String>{"user_id": user.user!.id};
-
-      favorites = await supabase.from('favorite').select().eq("user_id", uuid);
+      experinces = await supabase.from('experinces').select();
     } catch (error) {
       print(error);
       throw FormatException("here is error");
     }
 
-    return Response.ok(json.encode({"msg": "$favorites"}),
+    return Response.ok(json.encode({"msg": "$experinces"}),
         headers: {"Content-Type": "application/json"});
   } on FormatException catch (error) {
     return Response.badRequest(body: error.message);

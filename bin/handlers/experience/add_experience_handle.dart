@@ -2,26 +2,38 @@ import 'dart:convert';
 import 'package:shelf/shelf.dart';
 import 'package:supabase/supabase.dart';
 import '../../configuration/supabase.dart';
+import '../../helper/checkBody.dart';
 
-viewFavoriteHandler(Request req) async {
+addExperinceHandler(Request req) async {
   try {
+    final Map body = json.decode(await req.readAsString());
     final token = req.headers['authorization']!.split(" ").last;
+
+    List<String> keyNames = [
+      "photo_url",
+      "description",
+      "adult_price",
+      "child_price",
+      "title"
+    ];
+
+    checkBody(body: body, keysCheck: keyNames);
     final supabase = SupabaseIntegration.instant;
 
     await supabase!.auth.admin;
     final UserResponse user = await supabase.auth.getUser(token);
 
-    final PostgrestList favorites;
     try {
-      final uuid = <String, String>{"user_id": user.user!.id};
+      final uuid = <String, String>{"service_provider_id": user.user!.id};
+      body.addEntries(uuid.entries);
 
-      favorites = await supabase.from('favorite').select().eq("user_id", uuid);
+      await supabase.from('experinces').insert(body);
     } catch (error) {
       print(error);
       throw FormatException("here is error");
     }
 
-    return Response.ok(json.encode({"msg": "$favorites"}),
+    return Response.ok(json.encode({"msg": "done"}),
         headers: {"Content-Type": "application/json"});
   } on FormatException catch (error) {
     return Response.badRequest(body: error.message);
