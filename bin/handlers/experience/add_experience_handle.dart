@@ -14,7 +14,9 @@ addExperinceHandler(Request req) async {
       "description",
       "adult_price",
       "child_price",
-      "title"
+      "title",
+      "latitude",
+      "longitude"
     ];
 
     checkBody(body: body, keysCheck: keyNames);
@@ -24,10 +26,18 @@ addExperinceHandler(Request req) async {
     final UserResponse user = await supabase.auth.getUser(token);
 
     try {
-      final uuid = <String, String>{"service_provider_id": user.user!.id};
-      body.addEntries(uuid.entries);
+      final providerId = await supabase
+          .from("serviceproviders")
+          .select("id")
+          .eq("uuid_auth", user.user!.id);
 
-      await supabase.from('experinces').insert(body);
+      final id = <String, int>{"service_provider_id": providerId.first["id"]};
+      body.addEntries(id.entries);
+
+      print(body);
+
+      await supabase.from('experiences').insert(body);
+      print("doneeeeeeeeeeeeee");
     } catch (error) {
       print(error);
       throw FormatException("here is error");

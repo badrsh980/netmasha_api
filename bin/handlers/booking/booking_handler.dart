@@ -2,24 +2,32 @@ import 'dart:convert';
 import 'package:shelf/shelf.dart';
 import 'package:supabase/supabase.dart';
 import '../../configuration/supabase.dart';
+import '../../helper/checkBody.dart';
 
-viewExperinceHandler(Request req) async {
+
+
+
+// TODO: 
+otpHandler(Request req) async {
   try {
-    final token = req.headers['authorization']!.split(" ").last;
+    final body = json.decode(await req.readAsString());
+
+    List<String> keyNames = ["email", "otp"];
+    checkBody(body: body, keysCheck: keyNames);
+
     final supabase = SupabaseIntegration.instant;
+    AuthResponse? user;
 
-    await supabase!.auth.admin;
-    await supabase.auth.getUser(token);
+    user = await supabase?.auth.verifyOTP(
+        token: body['otp'], type: OtpType.email, email: body['email']);
 
-    final PostgrestList experinces;
-    try {
-      experinces = await supabase.from('experiences').select();
-    } catch (error) {
-      print(error);
-      throw FormatException("here is error");
-    }
-
-    return Response.ok(json.encode({"msg": "$experinces"}),
+    return Response.ok(
+        json.encode({
+          "msg": "Login successfully",
+          "token": user?.session?.accessToken,
+          "refreshToken": user?.session?.refreshToken,
+          "expiresAt": user?.session?.expiresAt
+        }),
         headers: {"Content-Type": "application/json"});
   } on FormatException catch (error) {
     return Response.badRequest(body: error.message);

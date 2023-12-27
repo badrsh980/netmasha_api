@@ -7,6 +7,7 @@ import '../Middlewares/changeHeadersMiddleware.dart';
 import 'AuthRoutes.dart';
 import 'PublicRoutes.dart';
 import 'UserRoutes.dart';
+import 'booking_route.dart';
 import 'experince_route.dart';
 import 'favorite_route.dart';
 
@@ -21,6 +22,7 @@ class MainRoutes {
       ..mount('/auth', AuthRoutes().route)
       ..mount('/public', PublicRoutes().route)
       ..mount('/experince', ExperinceRoutes().route)
+      ..mount("/booking", BookingRoutes().route)
       ..mount("/favorite", FavoriteRoutes().route)
       ..all('/<ignore|.*>', (Request req) {
         return Response.notFound("Sorry not found you page");
