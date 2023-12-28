@@ -21,7 +21,7 @@ class MainRoutes {
       ..mount('/user', UserRoutes().route)
       ..mount('/auth', AuthRoutes().route)
       ..mount('/public', PublicRoutes().route)
-      ..mount('/experience', ExperinceRoutes().route)
+      ..mount('/experience', ExperienceRoutes().route)
       ..mount("/booking", BookingRoutes().route)
       ..mount("/favorite", FavoriteRoutes().route)
       ..all('/<ignore|.*>', (Request req) {

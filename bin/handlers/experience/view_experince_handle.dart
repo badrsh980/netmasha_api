@@ -3,7 +3,7 @@ import 'package:shelf/shelf.dart';
 import 'package:supabase/supabase.dart';
 import '../../configuration/supabase.dart';
 
-viewExperinceHandler(Request req) async {
+viewExperienceHandler(Request req) async {
   try {
     final token = req.headers['authorization']!.split(" ").last;
     final supabase = SupabaseIntegration.instant;

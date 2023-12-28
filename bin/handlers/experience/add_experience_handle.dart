@@ -4,7 +4,7 @@ import 'package:supabase/supabase.dart';
 import '../../configuration/supabase.dart';
 import '../../helper/checkBody.dart';
 
-addExperinceHandler(Request req) async {
+addExperienceHandler(Request req) async {
   try {
     final Map body = json.decode(await req.readAsString());
     final token = req.headers['authorization']!.split(" ").last;
