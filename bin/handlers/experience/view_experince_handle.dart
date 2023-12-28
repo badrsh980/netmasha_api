@@ -19,7 +19,7 @@ viewExperienceHandler(Request req) async {
       throw FormatException("here is error");
     }
 
-    return Response.ok(json.encode({"msg": "$experinces"}),
+    return Response.ok(json.encode({"msg": experinces}),
         headers: {"Content-Type": "application/json"});
   } on FormatException catch (error) {
     return Response.badRequest(body: error.message);
