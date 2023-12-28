@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:shelf/shelf.dart';
 import 'package:supabase/supabase.dart';
 import '../../configuration/supabase.dart';
@@ -20,7 +19,7 @@ getExplorers(Request req) async {
           await supabase.from('explorers').select().eq("uuid_auth", uuid);
     } catch (error) {
       print(error);
-      throw FormatException("here is error");
+      throw FormatException("here is error$error");
     }
 
     return Response.ok(json.encode({"msg": explorers}),

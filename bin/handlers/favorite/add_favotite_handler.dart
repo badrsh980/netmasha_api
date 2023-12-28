@@ -20,7 +20,7 @@ addFavoriteHandler(Request req) async {
       await supabase.from('favorite').insert(body);
     } catch (error) {
       print(error);
-      throw FormatException("here is error");
+      throw FormatException("here is error $error");
     }
 
     return Response.ok(json.encode({"msg": "done"}),
