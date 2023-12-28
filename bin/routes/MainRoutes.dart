@@ -5,7 +5,6 @@ import 'package:shelf_rate_limiter/shelf_rate_limiter.dart';
 import 'package:shelf_router/shelf_router.dart';
 import '../Middlewares/changeHeadersMiddleware.dart';
 import 'AuthRoutes.dart';
-import 'PublicRoutes.dart';
 import 'UserRoutes.dart';
 import 'booking_route.dart';
 import 'experience_route.dart';
@@ -20,7 +19,6 @@ class MainRoutes {
       })
       ..mount('/user', UserRoutes().route)
       ..mount('/auth', AuthRoutes().route)
-      ..mount('/public', PublicRoutes().route)
       ..mount('/experience', ExperienceRoutes().route)
       ..mount("/booking", BookingRoutes().route)
       ..mount("/favorite", FavoriteRoutes().route)

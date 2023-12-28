@@ -4,10 +4,7 @@ import 'package:supabase/supabase.dart';
 import '../../configuration/supabase.dart';
 import '../../helper/checkBody.dart';
 
-
-
-
-// TODO: 
+// TODO:
 otpHandler(Request req) async {
   try {
     final body = json.decode(await req.readAsString());
