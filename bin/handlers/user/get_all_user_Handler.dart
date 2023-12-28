@@ -16,7 +16,8 @@ getExplorers(Request req) async {
     try {
       final uuid = <String, String>{"user_id": user.user!.id};
 
-      explorers = await supabase.from('explorers').select().eq("user_id", uuid);
+      explorers =
+          await supabase.from('explorers').select().eq("uuid_auth", uuid);
     } catch (error) {
       print(error);
       throw FormatException("here is error");
