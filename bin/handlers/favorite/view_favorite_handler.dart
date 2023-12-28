@@ -21,7 +21,7 @@ viewFavoriteHandler(Request req) async {
       throw FormatException("here is error");
     }
 
-    return Response.ok(json.encode({"msg": "$favorites"}),
+    return Response.ok(json.encode({"msg": favorites}),
         headers: {"Content-Type": "application/json"});
   } on FormatException catch (error) {
     return Response.badRequest(body: error.message);

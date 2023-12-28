@@ -8,15 +8,11 @@ addFavoriteHandler(Request req) async {
   try {
     final Map body = json.decode(await req.readAsString());
     final token = req.headers['authorization']!.split(" ").last;
-
     List<String> keyNames = ["experience_id"];
-
     checkBody(body: body, keysCheck: keyNames);
     final supabase = SupabaseIntegration.instant;
-
     await supabase!.auth.admin;
     final UserResponse user = await supabase.auth.getUser(token);
-
     try {
       final uuid = <String, String>{"user_id": user.user!.id};
       body.addEntries(uuid.entries);

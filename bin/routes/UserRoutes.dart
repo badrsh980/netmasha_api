@@ -13,7 +13,7 @@ class UserRoutes {
         return Response.ok("UserRoutes");
       })
       ..post('/create_post', createPostHandler)
-      ..get('/get_user', getuser);
+      ..get('/get_user', getExplorers);
 
     final pipeline =
         Pipeline().addMiddleware(checkTokenMiddleware()).addHandler(appRoutes);
