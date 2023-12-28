@@ -8,7 +8,7 @@ Middleware checkTokenMiddleware() => (innerHandler) => (Request req) async {
         }
         final token = req.headers["authorization"]?.split(" ")[1];
         print(token);
-        final jwt = JWT.verify(
+        JWT.verify(
             token!,
             SecretKey(
                 'oJVdT9Zs695KAP/OnTpzYcR6B6wI9F//n7I7G91endgR+obryG5b8gtSkPhpWDuBdNtbII3h8q1wtWf6o4eyKg=='));

@@ -8,7 +8,6 @@ import '../handlers/auth/otp_handler.dart';
 class AuthRoutes {
   Handler get route {
     final appRoutes = Router();
-
     appRoutes
       ..get("/", (Request req) {
         return Response.ok("AuthRoutes");
