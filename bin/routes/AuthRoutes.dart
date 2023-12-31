@@ -1,7 +1,7 @@
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
-import '../handlers/auth/convert_to_service_provider.dart';
+import '../handlers/service_provider/convert_to_service_provider.dart';
 import '../handlers/auth/createAccountHandler.dart';
 import '../handlers/auth/loginHandlers.dart';
 import '../handlers/auth/otp_handler.dart';
