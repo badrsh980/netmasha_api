@@ -18,13 +18,10 @@ removeFavoriteHandler(Request req) async {
     final UserResponse user = await supabase.auth.getUser(token);
 
     try {
-      final uuid = <String, String>{"user_id": user.user!.id};
-      body.addEntries(uuid.entries);
-
       await supabase
           .from('favorite')
           .delete()
-          .eq("user_id", uuid)
+          .eq("user_id", user.user!.id)
           .eq("experience_id", body['experience_id']);
     } catch (error) {
       print(error);

@@ -7,15 +7,12 @@ viewFavoriteHandler(Request req) async {
   try {
     final token = req.headers['authorization']!.split(" ").last;
     final supabase = SupabaseIntegration.instant;
-
     await supabase!.auth.admin;
     final UserResponse user = await supabase.auth.getUser(token);
-
     final PostgrestList favorites;
     try {
-      final uuid = <String, String>{"user_id": user.user!.id};
-
-      favorites = await supabase.from('favorite').select().eq("user_id", uuid);
+      favorites =
+          await supabase.from('favorite').select().eq("user_id", user.user!.id);
     } catch (error) {
       print(error);
       throw FormatException("here is error");

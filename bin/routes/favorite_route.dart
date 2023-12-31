@@ -13,7 +13,7 @@ class FavoriteRoutes {
         return Response.ok("UserRoutes");
       })
       ..post('/add', addFavoriteHandler)
-      ..post('/remove', removeFavoriteHandler)
+      ..delete('/remove', removeFavoriteHandler)
       ..get('/view', viewFavoriteHandler);
 
     final pipeline = Pipeline().addHandler(appRoutes);

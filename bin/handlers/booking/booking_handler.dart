@@ -5,26 +5,39 @@ import '../../configuration/supabase.dart';
 import '../../helper/checkBody.dart';
 
 // TODO:
-otpHandler(Request req) async {
+bookingHandler(Request req) async {
   try {
-    final body = json.decode(await req.readAsString());
+    final Map body = json.decode(await req.readAsString());
+    final token = req.headers['authorization']!.split(" ").last;
 
-    List<String> keyNames = ["email", "otp"];
+    List<String> keyNames = [
+      "experience_id",
+      "child_numbers",
+      "adult_numbers",
+      "date",
+    ];
     checkBody(body: body, keysCheck: keyNames);
-
     final supabase = SupabaseIntegration.instant;
-    AuthResponse? user;
+    await supabase!.auth.admin;
 
-    user = await supabase?.auth.verifyOTP(
-        token: body['otp'], type: OtpType.email, email: body['email']);
+    final UserResponse user = await supabase.auth.getUser(token);
+    try {
+      final explorersId = await supabase
+          .from("explorers")
+          .select("id")
+          .eq("uuid_auth", user.user!.id);
 
-    return Response.ok(
-        json.encode({
-          "msg": "Login successfully",
-          "token": user?.session?.accessToken,
-          "refreshToken": user?.session?.refreshToken,
-          "expiresAt": user?.session?.expiresAt
-        }),
+      final id = <String, int>{"explorer_id": explorersId.first["id"]};
+
+      body.addEntries(id.entries);
+      await supabase.from('bookings').insert(body);
+      print("done");
+    } catch (error) {
+      print(error);
+      throw FormatException("here is error");
+    }
+
+    return Response.ok(json.encode({"msg": "done"}),
         headers: {"Content-Type": "application/json"});
   } on FormatException catch (error) {
     return Response.badRequest(body: error.message);

@@ -33,11 +33,10 @@ addExperienceHandler(Request req) async {
 
       final id = <String, int>{"service_provider_id": providerId.first["id"]};
       body.addEntries(id.entries);
-
       print(body);
 
       await supabase.from('experiences').insert(body);
-      print("doneeeeeeeeeeeeee");
+      print("done");
     } catch (error) {
       print(error);
       throw FormatException("here is error");
