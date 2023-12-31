@@ -1,8 +1,8 @@
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import '../Middlewares/checkTokenMiddleware.dart';
-import '../handlers/user/createPostHandler.dart';
-import '../handlers/user/get_all_user_Handler.dart';
+import '../handlers/explorers/del_explorers_Handler.dart';
+import '../handlers/explorers/get_explorers_Handler.dart';
 
 class UserRoutes {
   Handler get route {
@@ -12,8 +12,8 @@ class UserRoutes {
       ..get("/", (Request req) {
         return Response.ok("UserRoutes");
       })
-      ..post('/create_post', createPostHandler)
-      ..get('/get_user', getExplorers);
+      ..get('/get_user', getExplorers)
+      ..delete('/del_user', delExplorers);
 
     final pipeline =
         Pipeline().addMiddleware(checkTokenMiddleware()).addHandler(appRoutes);

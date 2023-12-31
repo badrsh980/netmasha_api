@@ -10,7 +10,6 @@ createAccountHandler(Request req) async {
     List<String> keyNames = ["email", "password", "phone", "name"];
     checkBody(body: body, keysCheck: keyNames);
 
-    AuthResponse? user;
     final supabase = SupabaseIntegration.instant;
 
     await supabase!.auth.admin

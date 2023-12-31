@@ -3,22 +3,24 @@ import 'package:shelf/shelf.dart';
 import 'package:supabase/supabase.dart';
 import '../../configuration/supabase.dart';
 
-viewExperienceHandler(Request req) async {
+getExplorers(Request req) async {
   try {
     final token = req.headers['authorization']!.split(" ").last;
     final supabase = SupabaseIntegration.instant;
-    await supabase!.auth.admin;
-    await supabase.auth.getUser(token);
 
-    final PostgrestList experinces;
+    await supabase!.auth.admin;
+    final UserResponse user = await supabase.auth.getUser(token);
+    final PostgrestList explorers;
     try {
-      experinces = await supabase.from('experiences').select();
+      explorers = await supabase
+          .from('explorers')
+          .select()
+          .eq("uuid_auth", user.user!.id);
     } catch (error) {
-      print(error);
-      throw FormatException("here is error");
+      throw FormatException("here is error$error");
     }
 
-    return Response.ok(json.encode({"msg": experinces}),
+    return Response.ok(json.encode({"msg": explorers}),
         headers: {"Content-Type": "application/json"});
   } on FormatException catch (error) {
     return Response.badRequest(body: error.message);
