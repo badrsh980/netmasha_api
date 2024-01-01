@@ -34,7 +34,7 @@ bookingHandler(Request req) async {
       print("done");
     } catch (error) {
       print(error);
-      throw FormatException("here is error");
+      throw FormatException("here is error $error");
     }
 
     return Response.ok(json.encode({"msg": "done"}),
