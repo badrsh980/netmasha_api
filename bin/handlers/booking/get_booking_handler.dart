@@ -2,31 +2,29 @@ import 'dart:convert';
 import 'package:shelf/shelf.dart';
 import 'package:supabase/supabase.dart';
 import '../../configuration/supabase.dart';
-import '../../helper/checkBody.dart';
 
-messagesHandler(Request req) async {
+GetbookingHandler(Request req) async {
   try {
-    final Map body = json.decode(await req.readAsString());
     final token = req.headers['authorization']!.split(" ").last;
-    List<String> keyNames = [
-      "chat_id",
-      "message_text",
-    ];
-    checkBody(body: body, keysCheck: keyNames);
     final supabase = SupabaseIntegration.instant;
     await supabase!.auth.admin;
     final UserResponse user = await supabase.auth.getUser(token);
-    final id = <String, String>{"sender_id": user.user!.id};
-    print(id);
-    body.addEntries(id.entries);
+    final PostgrestList booking;
     try {
-      await supabase.from('messages').insert(body);
-      print("done");
+      final uuid = await supabase
+          .from('explorers')
+          .select("id")
+          .eq("uuid_auth", user.user!.id);
+      booking = await supabase
+          .from('bookings')
+          .select()
+          .eq("explorer_id", uuid.first["id"]);
     } catch (error) {
       print(error);
       throw FormatException("here is error");
     }
-    return Response.ok(json.encode({"msg": "done"}),
+
+    return Response.ok(json.encode({"msg": booking}),
         headers: {"Content-Type": "application/json"});
   } on FormatException catch (error) {
     return Response.badRequest(body: error.message);

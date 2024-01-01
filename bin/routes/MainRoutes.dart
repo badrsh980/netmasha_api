@@ -7,8 +7,10 @@ import '../Middlewares/changeHeadersMiddleware.dart';
 import 'AuthRoutes.dart';
 import 'UserRoutes.dart';
 import 'booking_route.dart';
+import 'chat_route.dart';
 import 'experience_route.dart';
 import 'favorite_route.dart';
+import 'massage_route.dart';
 
 class MainRoutes {
   Handler get route {
@@ -22,6 +24,8 @@ class MainRoutes {
       ..mount('/experience', ExperienceRoutes().route)
       ..mount("/booking", BookingRoutes().route)
       ..mount("/favorite", FavoriteRoutes().route)
+      ..mount("/chat", ChatRoutes().route)
+      ..mount("/massage", MassageRoutes().route)
       ..all('/<ignore|.*>', (Request req) {
         return Response.notFound("Sorry not found you page");
       });
